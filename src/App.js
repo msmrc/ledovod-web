@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainLayout from './components/MainLayout';
-import DashboardLayout from './components/DashboardLayout';
-import Home from './pages/Home';
+import MainLayout from './components/MainLayout/MainLayout';
+import DashboardLayout from './components/DashboardLayout/DashboardLayout';
+import Home from './pages/Home/Home';
 import Dashboard from './pages/Dashboard';
 import Requests from './pages/Requests';
 import Ships from './pages/Ships';
