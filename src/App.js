@@ -8,6 +8,8 @@ import Requests from './pages/Requests';
 import Ships from './pages/Ships';
 import Icebreakers from './pages/Icebreakers';
 import './App.css';
+import Schedule from './pages/Schedule/Schedule';
+import SeaMap from './pages/SeaMap/SeaMap';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="requests" element={<Requests />} />
           <Route path="ships" element={<Ships />} />
           <Route path="icebreakers" element={<Icebreakers />} />
+          <Route path="schedule" element={<Schedule />} />
+          <Route path="sea-map" element={<SeaMap />} />
         </Route>
       </Routes>
     </Router>

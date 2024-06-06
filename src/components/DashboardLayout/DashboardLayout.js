@@ -23,6 +23,12 @@ const DashboardLayout = () => {
               <li className="menu-item">
                 <Link to="/dashboard/icebreakers">Ледоколы</Link>
               </li>
+              <li className="menu-item">
+                <Link to="/dashboard/schedule">Расписание</Link>
+              </li>
+              <li className="menu-item">
+                <Link to="/dashboard/sea-map">Карта</Link>
+              </li>
             </ul>
           </nav>
         </div>
