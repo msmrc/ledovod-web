@@ -9,7 +9,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import styles from "./SeaMap.module.css";
-import data from "../../data/combined_data.json";
+import data from "../../data/updated_points (1).json";
 
 // Создание кастомной иконки для маркера
 const customMarkerIcon = new L.Icon({
@@ -56,6 +56,17 @@ const SeaMap = () => {
     setPoints(updatedPoints);
   };
 
+  const handleSave = () => {
+    const updatedData = JSON.stringify(points, null, 2);
+    const blob = new Blob([updatedData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'updated_points.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const renderMarkers = (points) => {
     return points.map(point => (
       <Marker
@@ -73,6 +84,7 @@ const SeaMap = () => {
 
   return (
     <div className={styles.mapContainer}>
+      <button className={styles.saveButton} onClick={handleSave}>Сохранить</button>
       <MapContainer center={[60, 0]} zoom={3} className={styles.map}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
