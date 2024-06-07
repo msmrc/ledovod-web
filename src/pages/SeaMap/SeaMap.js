@@ -5,6 +5,7 @@ import {
   Marker,
   Polyline,
   useMapEvents,
+  useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -18,7 +19,6 @@ const customMarkerIcon = new L.Icon({
   iconSize: [20, 20],
   iconAnchor: [10, 10],
 });
-
 
 const SeaMap = () => {
   const [points, setPoints] = useState(data);
@@ -35,10 +35,11 @@ const SeaMap = () => {
         point.connections.forEach(connId => {
           const connectedPoint = pointsMap.get(connId);
           if (connectedPoint) {
-            newLines.push([
-              [point.latitude, point.longitude],
-              [connectedPoint.latitude, connectedPoint.longitude]
-            ]);
+            newLines.push({
+              start: [point.latitude, point.longitude],
+              end: [connectedPoint.latitude, connectedPoint.longitude],
+              distance: calculateDistance(point.latitude, point.longitude, connectedPoint.latitude, connectedPoint.longitude)
+            });
           }
         });
       }
@@ -67,6 +68,17 @@ const SeaMap = () => {
     URL.revokeObjectURL(url);
   };
 
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the Earth in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
   const renderMarkers = (points) => {
     return points.map(point => (
       <Marker
@@ -81,6 +93,34 @@ const SeaMap = () => {
       />
     ));
   };
+  
+  const GeodesicLine = ({ start, end, distance }) => {
+    const map = useMap(); // distance
+
+    useEffect(() => {
+      const line = L.polyline([start, end], {
+        color: 'black',
+        weight: 3,
+        opacity: 0.7
+      }).addTo(map);
+
+      line.on('mouseover', (e) => {
+        const popup = L.popup()
+          .setLatLng(e.latlng)
+          .setContent(`Дистанция: ${distance.toFixed(2)} km`)
+          .openOn(map);
+        line.on('mouseout', () => {
+          map.closePopup(popup);
+        });
+      });
+
+      return () => {
+        map.removeLayer(line);
+      };
+    }, [map, start, end, distance]);
+
+    return null;
+  };
 
   return (
     <div className={styles.mapContainer}>
@@ -92,7 +132,12 @@ const SeaMap = () => {
         />
         {renderMarkers(points)}
         {lines.map((line, index) => (
-          <Polyline key={index} positions={line} color="black" />
+          <GeodesicLine 
+            key={index} 
+            start={line.start} 
+            end={line.end} 
+            distance={line.distance} 
+          />
         ))}
       </MapContainer>
     </div>
