@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  useMap,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import styles from "./SeaMap.module.css";
-import data from "../../data/updated_points (1).json";
-import { calculateDistance, calculateGeodesicSegments } from "./seaUtils";
+import data from "../../data/initial_points.json";
+import {
+  calculateDistance,
+  calculateGeodesicSegments,
+  generateUniqueId,
+} from "./seaUtils";
 
 // Создание кастомной иконки для маркера
 const customMarkerIcon = new L.Icon({
@@ -22,8 +21,13 @@ const customMarkerIcon = new L.Icon({
 const SeaMap = () => {
   const [points, setPoints] = useState(data);
   const [lines, setLines] = useState([]);
+  const [map, setMap] = useState(null);
 
   useEffect(() => {
+    updateLines();
+  }, [points]);
+
+  const updateLines = () => {
     const newLines = [];
     const pointsMap = new Map();
 
@@ -41,8 +45,9 @@ const SeaMap = () => {
               connectedPoint.longitude
             );
             newLines.push({
-              start: [point.latitude, point.longitude],
-              end: [connectedPoint.latitude, connectedPoint.longitude],
+              id: `${point.id}-${connectedPoint.id}`,
+              start: point,
+              end: connectedPoint,
               distance: calculateDistance(
                 point.latitude,
                 point.longitude,
@@ -57,7 +62,7 @@ const SeaMap = () => {
     });
 
     setLines(newLines);
-  }, [points]);
+  };
 
   const handleDragEnd = (id, newPos) => {
     const updatedPoints = points.map((point) =>
@@ -79,6 +84,53 @@ const SeaMap = () => {
     URL.revokeObjectURL(url);
   };
 
+  const handleLineClick = (event, start, end) => {
+    const newLat = event.latlng.lat;
+    const newLng = event.latlng.lng;
+    const newId = generateUniqueId();
+    const newName = prompt("Введите название новой точки:", "Новая точка");
+
+    if (!newName) {
+      console.error("не указали новую точку");
+      return;
+    }
+
+    const newPoint = {
+      id: newId,
+      name: newName,
+      latitude: newLat,
+      longitude: newLng,
+      connections: [start.id, end.id],
+    };
+
+    const startPointIndex = points.findIndex((point) => point.id === start.id);
+    const endPointIndex = points.findIndex((point) => point.id === end.id);
+
+    if (startPointIndex === -1 || endPointIndex === -1) {
+      console.error("Start or end point not found");
+      return;
+    }
+
+    const updatedPoints = [...points, newPoint];
+
+    updatedPoints[startPointIndex] = {
+      ...updatedPoints[startPointIndex],
+      connections: updatedPoints[startPointIndex].connections
+        .filter((connId) => connId !== end.id)
+        .concat(newPoint.id),
+    };
+
+    updatedPoints[endPointIndex] = {
+      ...updatedPoints[endPointIndex],
+      connections: updatedPoints[endPointIndex].connections
+        .filter((connId) => connId !== start.id)
+        .concat(newPoint.id),
+    };
+
+    setPoints(updatedPoints);
+    updateLines();
+  };
+
   const renderMarkers = (points) => {
     return points.map((point) => (
       <Marker
@@ -89,39 +141,49 @@ const SeaMap = () => {
         eventHandlers={{
           dragend: (event) => handleDragEnd(point.id, event.target.getLatLng()),
         }}
-        title={point.name}
+        title={point.name || "Новая точка"}
       />
     ));
   };
 
-  const GeodesicLine = ({ segments, distance }) => {
-    const map = useMap();
+  const GeodesicLine = ({ id, segments, start, end, distance }) => {
+    const mapInstance = useMap();
 
     useEffect(() => {
-      segments.forEach((segment) => {
+      const lines = segments.map((segment) => {
         const line = L.polyline(segment, {
           color: "black",
           weight: 3,
           opacity: 0.7,
-        }).addTo(map);
+        }).addTo(mapInstance);
 
         line.on("mouseover", (e) => {
           const popup = L.popup()
             .setLatLng(e.latlng)
             .setContent(`Дистанция: ${distance.toFixed(2)} морских миль`)
-            .openOn(map);
+            .openOn(mapInstance);
           line.on("mouseout", () => {
-            map.closePopup(popup);
+            mapInstance.closePopup(popup);
           });
         });
 
-        return () => {
-          map.removeLayer(line);
-        };
+        line.on("click", (event) => {
+          handleLineClick(event, start, end);
+        });
+
+        return line;
       });
-    }, [map, segments, distance]);
+
+      return () => {
+        lines.forEach((line) => mapInstance.removeLayer(line));
+      };
+    }, [mapInstance, segments, distance]);
 
     return null;
+  };
+
+  const handleMapLoad = (mapInstance) => {
+    setMap(mapInstance);
   };
 
   return (
@@ -134,16 +196,20 @@ const SeaMap = () => {
         zoom={3}
         className={styles.map}
         worldCopyJump={true}
+        whenCreated={handleMapLoad}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         {renderMarkers(points)}
-        {lines.map((line, index) => (
+        {lines.map((line) => (
           <GeodesicLine
-            key={index}
+            key={line.id}
+            id={line.id}
             segments={line.segments}
+            start={line.start}
+            end={line.end}
             distance={line.distance}
           />
         ))}
