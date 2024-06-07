@@ -3,8 +3,6 @@ import {
   MapContainer,
   TileLayer,
   Marker,
-  Polyline,
-  useMapEvents,
   useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -100,25 +98,27 @@ const SeaMap = () => {
     const map = useMap();
 
     useEffect(() => {
-      const line = L.polyline(segments, {
-        color: "black",
-        weight: 3,
-        opacity: 0.7,
-      }).addTo(map);
+      segments.forEach((segment) => {
+        const line = L.polyline(segment, {
+          color: "black",
+          weight: 3,
+          opacity: 0.7,
+        }).addTo(map);
 
-      line.on("mouseover", (e) => {
-        const popup = L.popup()
-          .setLatLng(e.latlng)
-          .setContent(`Distance: ${distance.toFixed(2)} km`)
-          .openOn(map);
-        line.on("mouseout", () => {
-          map.closePopup(popup);
+        line.on("mouseover", (e) => {
+          const popup = L.popup()
+            .setLatLng(e.latlng)
+            .setContent(`Дистанция: ${distance.toFixed(2)} морских миль`)
+            .openOn(map);
+          line.on("mouseout", () => {
+            map.closePopup(popup);
+          });
         });
-      });
 
-      return () => {
-        map.removeLayer(line);
-      };
+        return () => {
+          map.removeLayer(line);
+        };
+      });
     }, [map, segments, distance]);
 
     return null;
