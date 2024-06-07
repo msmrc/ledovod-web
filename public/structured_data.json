@@ -1,0 +1,431 @@
+{
+    "id": 0,
+    "latitude": 73.1,
+    "longitude": 80,
+    "point_name": "Бухта Север и Диксон",
+    "children": [
+      {
+        "id": 43,
+        "latitude": 74.8,
+        "longitude": 84.2,
+        "point_name": "Карское - 2 (прибрежный)",
+        "children": [
+          {
+            "id": 36,
+            "latitude": 76.5,
+            "longitude": 97.6,
+            "point_name": "Таймырский залив",
+            "children": [
+              {
+                "id": 19,
+                "latitude": 77.8,
+                "longitude": 104.1,
+                "point_name": "пролив Вилькицкого - восток",
+                "children": [
+                  {
+                    "id": 20,
+                    "latitude": 77.7,
+                    "longitude": 99.5,
+                    "point_name": "пролив Вилькицкого - запад"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "latitude": 69.4,
+        "longitude": 86.15,
+        "point_name": "Дудинка"
+      },
+      {
+        "id": 2,
+        "latitude": 69.9,
+        "longitude": 44.6,
+        "point_name": "кромка льда на Западе",
+        "children": [
+          {
+            "id": 3,
+            "latitude": 69.15,
+            "longitude": 57.68,
+            "point_name": "Варандей-Приразломное"
+          },
+          {
+            "id": 5,
+            "latitude": 71.5,
+            "longitude": 22,
+            "point_name": "Окно в Европу"
+          },
+          {
+            "id": 29,
+            "latitude": 64.95,
+            "longitude": 40.05,
+            "point_name": "Архангельск"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "latitude": 73,
+        "longitude": 44,
+        "point_name": "Штокман",
+        "children": [
+          {
+            "id": 5,
+            "latitude": 71.5,
+            "longitude": 22,
+            "point_name": "Окно в Европу"
+          },
+          {
+            "id": 41,
+            "latitude": 69.5,
+            "longitude": 33.75,
+            "point_name": "Рейд Мурманска"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "latitude": 74.6,
+        "longitude": 63.9,
+        "point_name": "Победа месторождение",
+        "children": [
+          {
+            "id": 7,
+            "latitude": 76.4,
+            "longitude": 86.4,
+            "point_name": "Карское - 3 (центр)"
+          },
+          {
+            "id": 16,
+            "latitude": 77.3,
+            "longitude": 67.7,
+            "point_name": "Мыс Желания",
+            "children": [
+              {
+                "id": 21,
+                "latitude": 76.2,
+                "longitude": 58.3,
+                "point_name": "около Новой Земли"
+              },
+              {
+                "id": 34,
+                "latitude": 72.4,
+                "longitude": 65.6,
+                "point_name": "Ленинградское-Русановское"
+              }
+            ]
+          },
+          {
+            "id": 15,
+            "latitude": 70.3,
+            "longitude": 57.8,
+            "point_name": "Карские ворота"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "latitude": 77.6,
+        "longitude": 107.7,
+        "point_name": "пролив Вилькицкого - 3",
+        "children": [
+          {
+            "id": 9,
+            "latitude": 74.9,
+            "longitude": 116.7,
+            "point_name": "Лаптевых - 4 (юг)"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "latitude": 73.1,
+        "longitude": 72.7,
+        "point_name": "Вход в Обскую губу",
+        "children": [
+          {
+            "id": 11,
+            "latitude": 68.5,
+            "longitude": 73.7,
+            "point_name": "Новый порт"
+          },
+          {
+            "id": 13,
+            "latitude": 74,
+            "longitude": 76.7,
+            "point_name": "Карское - 1 (сбор каравана)",
+            "children": [
+              {
+                "id": 7,
+                "latitude": 76.4,
+                "longitude": 86.4,
+                "point_name": "Карское - 3 (центр)"
+              }
+            ]
+          },
+          {
+            "id": 16,
+            "latitude": 77.3,
+            "longitude": 67.7,
+            "point_name": "Мыс Желания"
+          },
+          {
+            "id": 25,
+            "latitude": 71.3,
+            "longitude": 72.15,
+            "point_name": "Сабетта"
+          },
+          {
+            "id": 35,
+            "latitude": 71,
+            "longitude": 73.73,
+            "point_name": "терминал Утренний"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "latitude": 76.75,
+        "longitude": 116,
+        "point_name": "Лаптевых - 1 (центр)",
+        "children": [
+          {
+            "id": 24,
+            "latitude": 74,
+            "longitude": 128.1,
+            "point_name": "устье Лены",
+            "children": [
+              {
+                "id": 22,
+                "latitude": 74.4,
+                "longitude": 139,
+                "point_name": "Пролив Санникова - 1",
+                "children": [
+                  {
+                    "id": 23,
+                    "latitude": 74.3,
+                    "longitude": 146.7,
+                    "point_name": "Пролив Санникова - 2"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 42,
+            "latitude": 76.7,
+            "longitude": 140.8,
+            "point_name": "остров Котельный"
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "latitude": 71.74,
+        "longitude": 184.7,
+        "point_name": "остров Врангеля",
+        "children": [
+          {
+            "id": 28,
+            "latitude": 73.5,
+            "longitude": 169.9,
+            "point_name": "Восточно-Сибирское - 3 (север)"
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "latitude": 70.7,
+        "longitude": 170.5,
+        "point_name": "Восточно-Сибирское - 1 (восток)",
+        "children": [
+          {
+            "id": 26,
+            "latitude": 69.1,
+            "longitude": 169.4,
+            "point_name": "мыс.Наглёйнын"
+          },
+          {
+            "id": 39,
+            "latitude": 69.75,
+            "longitude": 169.9,
+            "point_name": "Рейд Певек"
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "latitude": 77.8,
+        "longitude": 104.1,
+        "point_name": "пролив Вилькицкого - восток"
+      },
+      {
+        "id": 20,
+        "latitude": 77.7,
+        "longitude": 99.5,
+        "point_name": "пролив Вилькицкого - запад"
+      },
+      {
+        "id": 21,
+        "latitude": 76.2,
+        "longitude": 58.3,
+        "point_name": "около Новой Земли"
+      },
+      {
+        "id": 22,
+        "latitude": 74.4,
+        "longitude": 139,
+        "point_name": "Пролив Санникова - 1"
+      },
+      {
+        "id": 23,
+        "latitude": 74.3,
+        "longitude": 146.7,
+        "point_name": "Пролив Санникова - 2"
+      },
+      {
+        "id": 24,
+        "latitude": 74,
+        "longitude": 128.1,
+        "point_name": "устье Лены"
+      },
+      {
+        "id": 25,
+        "latitude": 71.3,
+        "longitude": 72.15,
+        "point_name": "Сабетта"
+      },
+      {
+        "id": 26,
+        "latitude": 69.1,
+        "longitude": 169.4,
+        "point_name": "мыс.Наглёйнын"
+      },
+      {
+        "id": 27,
+        "latitude": 69.9,
+        "longitude": 179,
+        "point_name": "пролив Лонга",
+        "children": [
+          {
+            "id": 28,
+            "latitude": 73.5,
+            "longitude": 169.9,
+            "point_name": "Восточно-Сибирское - 3 (север)"
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "latitude": 64.95,
+        "longitude": 40.05,
+        "point_name": "Архангельск"
+      },
+      {
+        "id": 30,
+        "latitude": 75.9,
+        "longitude": 152.6,
+        "point_name": "Лаптевых - 3 (восток)"
+      },
+      {
+        "id": 31,
+        "latitude": 68.37,
+        "longitude": 54.6,
+        "point_name": "МОТ Печора"
+      },
+      {
+        "id": 32,
+        "latitude": 73.7,
+        "longitude": 109.26,
+        "point_name": "Хатангский залив"
+      },
+      {
+        "id": 33,
+        "latitude": 72,
+        "longitude": 159.5,
+        "point_name": "Восточно-Сибирское - 2 (запад)"
+      },
+      {
+        "id": 34,
+        "latitude": 72.4,
+        "longitude": 65.6,
+        "point_name": "Ленинградское-Русановское"
+      },
+      {
+        "id": 35,
+        "latitude": 71,
+        "longitude": 73.73,
+        "point_name": "терминал Утренний"
+      },
+      {
+        "id": 36,
+        "latitude": 76.5,
+        "longitude": 97.6,
+        "point_name": "Таймырский залив"
+      },
+      {
+        "id": 37,
+        "latitude": 64.2,
+        "longitude": 188.2,
+        "point_name": "Берингово"
+      },
+      {
+        "id": 38,
+        "latitude": 60.7,
+        "longitude": 175.3,
+        "point_name": "кромка льда на Востоке"
+      },
+      {
+        "id": 39,
+        "latitude": 69.75,
+        "longitude": 169.9,
+        "point_name": "Рейд Певек"
+      },
+      {
+        "id": 40,
+        "latitude": 75.5,
+        "longitude": 131.5,
+        "point_name": "Лаптевых - 2 (центр)"
+      },
+      {
+        "id": 41,
+        "latitude": 69.5,
+        "longitude": 33.75,
+        "point_name": "Рейд Мурманска"
+      },
+      {
+        "id": 42,
+        "latitude": 76.7,
+        "longitude": 140.8,
+        "point_name": "остров Котельный"
+      },
+      {
+        "id": 43,
+        "latitude": 74.8,
+        "longitude": 84.2,
+        "point_name": "Карское - 2 (прибрежный)"
+      },
+      {
+        "id": 44,
+        "latitude": 67.58,
+        "longitude": 47.82,
+        "point_name": "Индига"
+      },
+      {
+        "id": 45,
+        "latitude": 65.9,
+        "longitude": -169.35,
+        "point_name": "Берингов пролив"
+      },
+      {
+        "id": 46,
+        "latitude": 55.7,
+        "longitude": 164.25,
+        "point_name": "Окно в Азию"
+      }
+    ]
+  }
+  
