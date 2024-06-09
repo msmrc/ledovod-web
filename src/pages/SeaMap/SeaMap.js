@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMap,
+  Popup,
+  Polygon,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import styles from "./SeaMap.module.css";
@@ -22,22 +29,31 @@ const customMarkerIcon = new L.Icon({
 });
 
 const portIcon = new L.Icon({
-  iconUrl: require('../../data/images/port.png'),
+  iconUrl: require("../../data/images/port.png"),
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
 
 const checkpointIcon = new L.Icon({
-  iconUrl: require('../../data/images/checkpoint.png'),
+  iconUrl: require("../../data/images/checkpoint.png"),
   iconSize: [25, 41],
-  iconAnchor: [12, 41]
+  iconAnchor: [12, 41],
 });
 
+const initialIcePolygon = [
+  [65, -20],
+  [65, -10],
+  [70, -10],
+  [70, -20],
+  [65, -20],
+];
 
 const SeaMap = () => {
   const [points, setPoints] = useState(data);
   const [lines, setLines] = useState([]);
   const [map, setMap] = useState(null);
+  const [showIceLayer, setShowIceLayer] = useState(false);
+  const [icePolygon, setIcePolygon] = useState(initialIcePolygon);
 
   useEffect(() => {
     updateLines();
@@ -160,9 +176,7 @@ const SeaMap = () => {
 
   const handleUpdatePointType = (id, newType) => {
     const updatedPoints = points.map((point) =>
-      point.id === id
-        ? { ...point, type: newType }
-        : point
+      point.id === id ? { ...point, type: newType } : point
     );
     setPoints(updatedPoints);
   };
@@ -179,11 +193,18 @@ const SeaMap = () => {
         }}
         title={`${point.name || "Новая точка"}: (${point.type || "Тип"})`}
       >
-  <Popup>
+        <Popup>
           <div className={styles.popupContent}>
             <h3 className={styles.popupTitle}>{point.name || "Новая точка"}</h3>
-            <p className={styles.popupType}>Type: {point.type || "Тип не указан"}</p>
-            <button className={styles.popupButton} onClick={() => handleDeletePoint(point.id)}>Удалить точку</button>
+            <p className={styles.popupType}>
+              Type: {point.type || "Тип не указан"}
+            </p>
+            <button
+              className={styles.popupButton}
+              onClick={() => handleDeletePoint(point.id)}
+            >
+              Удалить точку
+            </button>
             <select
               className={styles.popupSelect}
               value={point.type}
@@ -273,19 +294,38 @@ const SeaMap = () => {
     updateLines();
   };
 
+  const handleIceLayerToggle = () => {
+    setShowIceLayer(!showIceLayer);
+  };
+
+  const handleIcePolygon = (e) => {
+    setIcePolygon(e.target.getLatLngs()[0]);
+  };
+
   const handleMapLoad = (mapInstance) => {
     setMap(mapInstance);
+    mapInstance.on("editable:vertex:dragend", handleIcePolygon);
+    mapInstance.on("editable:vertex:new", handleIcePolygon);
+    mapInstance.on("editable:vertex:deleted", handleIcePolygon);
   };
 
   return (
     <div className={styles.mapContainer}>
       <div className={styles.controlPanel}>
+        <label>
+          <input
+            type="checkbox"
+            checked={showIceLayer}
+            onChange={handleIceLayerToggle}
+          />
+          Показать слой льда
+        </label>
         <button className={styles.saveButton} onClick={handleSave}>
           Сохранить
         </button>
       </div>
       <MapContainer
-        center={[60, 0]}
+        center={[65, -15]}
         zoom={3}
         className={styles.map}
         worldCopyJump={true}
@@ -295,6 +335,14 @@ const SeaMap = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
+        {showIceLayer && (
+          <Polygon
+            positions={icePolygon}
+            color="blue"
+            fillOpacity={0.3}
+            editable={true}
+          />
+        )}
         {renderMarkers(points)}
         {lines.map((line) => (
           <GeodesicLine
