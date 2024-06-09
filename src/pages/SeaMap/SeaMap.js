@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import styles from "./SeaMap.module.css";
-import data from "../../data/initial_points.json";
+// import data from "../../data/initial_points.json";
+import data from "../../data/data_with_types.json";
 import {
   calculateDistance,
   calculateGeodesicSegments,
   generateUniqueId,
 } from "./seaUtils";
+
+const POINT_TYPES = ["Порт", "Контрольная точка"];
 
 // Создание кастомной иконки для маркера
 const customMarkerIcon = new L.Icon({
@@ -17,6 +20,19 @@ const customMarkerIcon = new L.Icon({
   iconSize: [20, 20],
   iconAnchor: [10, 10],
 });
+
+const portIcon = new L.Icon({
+  iconUrl: require('../../data/images/port.png'),
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+
+const checkpointIcon = new L.Icon({
+  iconUrl: require('../../data/images/checkpoint.png'),
+  iconSize: [25, 41],
+  iconAnchor: [12, 41]
+});
+
 
 const SeaMap = () => {
   const [points, setPoints] = useState(data);
@@ -91,7 +107,7 @@ const SeaMap = () => {
     const newName = prompt("Введите название новой точки:", "Новая точка");
 
     if (!newName) {
-      console.error("не указали новую точку");
+      console.error("Введите название точки");
       return;
     }
 
@@ -107,7 +123,7 @@ const SeaMap = () => {
     const endPointIndex = points.findIndex((point) => point.id === end.id);
 
     if (startPointIndex === -1 || endPointIndex === -1) {
-      console.error("Start or end point not found");
+      console.error("Точка не найдена");
       return;
     }
 
@@ -131,18 +147,57 @@ const SeaMap = () => {
     updateLines();
   };
 
+  const getMarkerIcon = (type) => {
+    switch (type) {
+      case "Порт":
+        return portIcon;
+      case "Контрольная точка":
+        return checkpointIcon;
+      default:
+        return customMarkerIcon;
+    }
+  };
+
+  const handleUpdatePointType = (id, newType) => {
+    const updatedPoints = points.map((point) =>
+      point.id === id
+        ? { ...point, type: newType }
+        : point
+    );
+    setPoints(updatedPoints);
+  };
+
   const renderMarkers = (points) => {
     return points.map((point) => (
       <Marker
         key={point.id}
         position={[point.latitude, point.longitude]}
-        icon={customMarkerIcon}
+        icon={getMarkerIcon(point.type)}
         draggable={true}
         eventHandlers={{
           dragend: (event) => handleDragEnd(point.id, event.target.getLatLng()),
         }}
-        title={point.name || "Новая точка"}
-      />
+        title={`${point.name || "Новая точка"}: (${point.type || "Тип"})`}
+      >
+  <Popup>
+          <div className={styles.popupContent}>
+            <h3 className={styles.popupTitle}>{point.name || "Новая точка"}</h3>
+            <p className={styles.popupType}>Type: {point.type || "Тип не указан"}</p>
+            <button className={styles.popupButton} onClick={() => handleDeletePoint(point.id)}>Удалить точку</button>
+            <select
+              className={styles.popupSelect}
+              value={point.type}
+              onChange={(e) => handleUpdatePointType(point.id, e.target.value)}
+            >
+              {POINT_TYPES.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+        </Popup>
+      </Marker>
     ));
   };
 
@@ -160,7 +215,7 @@ const SeaMap = () => {
         line.on("mouseover", (e) => {
           const popup = L.popup()
             .setLatLng(e.latlng)
-            .setContent(`Дистанция: ${distance.toFixed(2)} морских миль`)
+            .setContent(`Дистанция: ${distance.toFixed(2)} морских милей`)
             .openOn(mapInstance);
           line.on("mouseout", () => {
             mapInstance.closePopup(popup);
@@ -182,15 +237,53 @@ const SeaMap = () => {
     return null;
   };
 
+  const handleDeletePoint = (id) => {
+    const pointToDelete = points.find((point) => point.id === id);
+    if (!pointToDelete) {
+      console.error("Точка не найдена");
+      return;
+    }
+
+    const { connections } = pointToDelete;
+
+    const updatedPoints = points.filter((point) => point.id !== id);
+    updatedPoints.forEach((point) => {
+      point.connections = point.connections.filter((connId) => connId !== id);
+    });
+
+    if (connections.length === 2) {
+      const [conn1, conn2] = connections;
+      const conn1Index = updatedPoints.findIndex((point) => point.id === conn1);
+      const conn2Index = updatedPoints.findIndex((point) => point.id === conn2);
+
+      if (conn1Index !== -1 && conn2Index !== -1) {
+        updatedPoints[conn1Index] = {
+          ...updatedPoints[conn1Index],
+          connections: [...updatedPoints[conn1Index].connections, conn2],
+        };
+
+        updatedPoints[conn2Index] = {
+          ...updatedPoints[conn2Index],
+          connections: [...updatedPoints[conn2Index].connections, conn1],
+        };
+      }
+    }
+
+    setPoints(updatedPoints);
+    updateLines();
+  };
+
   const handleMapLoad = (mapInstance) => {
     setMap(mapInstance);
   };
 
   return (
     <div className={styles.mapContainer}>
-      <button className={styles.saveButton} onClick={handleSave}>
-        Сохранить
-      </button>
+      <div className={styles.controlPanel}>
+        <button className={styles.saveButton} onClick={handleSave}>
+          Сохранить
+        </button>
+      </div>
       <MapContainer
         center={[60, 0]}
         zoom={3}
