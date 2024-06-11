@@ -1,87 +1,116 @@
-.homeContainer {
+.container {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
   width: 100%;
   height: 100vh;
-  background-color: white;
+  box-sizing: border-box;
+  margin: 0;
 }
 
-.imageContainer {
-  flex: 1;
-  position: relative;
-}
-
-.mainImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 0 20px 20px 0;
-}
-
-.feature {
-  position: absolute;
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 10px 20px;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-}
-
-.feature1 {
-  top: 10%;
-  left: 10%;
-}
-
-.feature2 {
-  top: 40%;
-  left: 60%;
-}
-
-.feature3 {
-  bottom: 10%;
-  left: 30%;
-}
-
-.contentContainer {
-  flex: 1;
+.textContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  flex: 1;
   padding: 20px;
 }
 
-.logo {
-  width: 106px;
-  height: 104px;
+.textWrapper {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+.text {
+  color: #111827;
+  font-size: 2.5rem;
+  font-weight: 600;
+  font-family: 'Mulish', sans-serif;
+  line-height: 1.2;
   margin-bottom: 20px;
 }
 
-.mainText {
-  color: black;
-  font-size: 2rem;
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  margin-bottom: 20px;
-}
-
-.buttonLink {
-  text-decoration: none;
-}
-
-.buttonBox {
-  display: flex;
-  align-items: center;
+.buttonContainer {
+  background-color: #3b82f6;
+  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  display: inline-flex; /* Изменено на inline-flex */
   justify-content: center;
-  width: 200px;
-  height: 50px;
-  background-color: #1E90FF; /* blue-500 */
-  border-radius: 10px;
-  cursor: pointer;
+  align-items: center;
+  text-decoration: none;
+  width: auto; /* Обновлено для авто ширины */
+  margin-top: 20px; /* Добавлено для отступа сверху */
 }
 
 .buttonText {
   color: white;
-  font-size: 1.5rem;
-  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Mulish', sans-serif;
+  line-height: 1.25;
+}
+
+.imageContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .textContainer {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .imageContainer {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .text {
+    font-size: 2rem;
+  }
+
+  .buttonContainer {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .buttonText {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .text {
+    font-size: 1.5rem;
+  }
+
+  .buttonContainer {
+    padding: 0.5rem 1rem;
+  }
+
+  .buttonText {
+    font-size: 0.75rem;
+  }
 }

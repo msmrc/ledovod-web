@@ -1,20 +1,16 @@
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
-import "./MainLayout.css";
+import { Outlet } from "react-router-dom";
+import styles from "./MainLayout.module.css";
+import MainHeader from "../MainHeader/MainHeader";
 
 const MainLayout = () => {
   return (
-    <div>
-      {/* <header>
-          <div className="logo"><Link to="/">Ledovod</Link></div>
-          <nav>
-            <ul>
-                <li><Link to="/dashboard">Войти</Link></li>
-            </ul>
-          </nav>
-        </header> */}
+    <div className={styles.mainLayout}>
+      <MainHeader />
       <main>
-        <Outlet />
+        <div className={styles.mainContainer}>
+          <Outlet />
+        </div>
       </main>
     </div>
   );

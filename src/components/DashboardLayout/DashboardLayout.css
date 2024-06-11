@@ -1,51 +1,34 @@
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw; /* Полная ширина экрана */
+}
+
+.dashboard-main-content {
+  flex: 1; /* Растягиваем основной контент */
+  display: flex;
+  flex-direction: column;
+}
+
 .admin-header {
+  height: 72px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  background-color: #282c34;
-  padding: 10px 20px;
-  color: white;
-}
-
-.logo-menu-container {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  margin-right: 20px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-}
-
-.menu {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.menu-item {
-  margin-left: 20px;
-}
-
-.menu-item a {
-  color: white;
-  text-decoration: none;
+  padding: 0 32px;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
-.user-info img {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
+.dashboard-main {
+  flex: 1;
+  overflow-y: auto; /* Прокрутка основного контента */
+  padding: 20px;
+  box-sizing: border-box;
 }
