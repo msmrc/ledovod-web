@@ -2,21 +2,18 @@ import React, { useState, useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
-  Marker,
-  useMap,
-  Popup,
-  Polygon,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import styles from "./SeaMap.module.css";
 // import data from "../../data/initial_points.json";
 import data from "../../data/data_with_types.json";
-import {
-  calculateDistance,
-  calculateGeodesicSegments,
-  generateUniqueId,
-} from "./seaUtils";
+import GeodesicLine from "../../components/GeodesicLine";
+import IcePolygon from "../../components/IcePolygon";
+import MarkerPopup from "../../components/MarkerPopup/MarkerPopup";
+import { generateUniqueId } from "../../utils/generateUniqueId";
+import { calculateGeodesicSegments } from "../../utils/calculateGeodesicSegments";
+import { calculateDistance } from "../../utils/calculateDistance";
 
 const POINT_TYPES = ["Порт", "Контрольная точка"];
 
@@ -40,12 +37,87 @@ const checkpointIcon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
-const initialIcePolygon = [
-  [65, -20],
-  [65, -10],
-  [70, -10],
-  [70, -20],
-  [65, -20],
+const initialIcePolygons = [
+  {
+    id: generateUniqueId(),
+    coordinates: [
+      [69.0, 32.5],
+      [69.5, 33.0],
+      [69.2, 33.5],
+      [69.9, 35.5],
+    ],
+    passability: "high",
+  },
+  {
+    id: generateUniqueId(),
+    coordinates: [
+      [75.0, 55.0],
+      [75.5, 56.0],
+      [75.2, 56.5],
+      [77.0, 55.0],
+    ],
+    passability: "medium",
+  },
+  {
+    id: generateUniqueId(),
+    coordinates: [
+      [79.5, 101.0],
+      [80.0, 102.0],
+      [79.7, 102.5],
+      [80.5, 101.0],
+    ],
+    passability: "low",
+  },
+  {
+    id: generateUniqueId(),
+    coordinates: [
+      [75.1, 147.0],
+      [75.6, 148.0],
+      [75.3, 148.5],
+      [76.1, 147.0],
+    ],
+    passability: "medium",
+  },
+  {
+    id: generateUniqueId(),
+    coordinates: [
+      [64.5, 40.5],
+      [65.0, 41.0],
+      [64.7, 41.5],
+      [65.5, 40.5],
+    ],
+    passability: "low",
+  },
+  {
+    id: generateUniqueId(),
+    coordinates: [
+      [72.5, 52.0],
+      [73.0, 52.5],
+      [72.7, 53.0],
+      [73.5, 52.0],
+    ],
+    passability: "high",
+  },
+  {
+    id: generateUniqueId(),
+    coordinates: [
+      [70.0, 130.0],
+      [70.5, 131.0],
+      [70.2, 131.5],
+      [72.0, 130.0],
+    ],
+    passability: "medium",
+  },
+  {
+    id: generateUniqueId(),
+    coordinates: [
+      [76.0, 140.0],
+      [76.5, 141.0],
+      [76.2, 141.5],
+      [79.0, 140.0],
+    ],
+    passability: "low",
+  },
 ];
 
 const SeaMap = () => {
@@ -53,7 +125,7 @@ const SeaMap = () => {
   const [lines, setLines] = useState([]);
   const [map, setMap] = useState(null);
   const [showIceLayer, setShowIceLayer] = useState(false);
-  const [icePolygon, setIcePolygon] = useState(initialIcePolygon);
+  const [icePolygons, setIcePolygons] = useState(initialIcePolygons);
 
   useEffect(() => {
     updateLines();
@@ -183,79 +255,16 @@ const SeaMap = () => {
 
   const renderMarkers = (points) => {
     return points.map((point) => (
-      <Marker
+      <MarkerPopup
         key={point.id}
-        position={[point.latitude, point.longitude]}
-        icon={getMarkerIcon(point.type)}
-        draggable={true}
-        eventHandlers={{
-          dragend: (event) => handleDragEnd(point.id, event.target.getLatLng()),
-        }}
-        title={`${point.name || "Новая точка"}: (${point.type || "Тип"})`}
-      >
-        <Popup>
-          <div className={styles.popupContent}>
-            <h3 className={styles.popupTitle}>{point.name || "Новая точка"}</h3>
-            <p className={styles.popupType}>
-              Type: {point.type || "Тип не указан"}
-            </p>
-            <button
-              className={styles.popupButton}
-              onClick={() => handleDeletePoint(point.id)}
-            >
-              Удалить точку
-            </button>
-            <select
-              className={styles.popupSelect}
-              value={point.type}
-              onChange={(e) => handleUpdatePointType(point.id, e.target.value)}
-            >
-              {POINT_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-          </div>
-        </Popup>
-      </Marker>
+        point={point}
+        handleDragEnd={handleDragEnd}
+        handleDeletePoint={handleDeletePoint}
+        handleUpdatePointType={handleUpdatePointType}
+        POINT_TYPES={POINT_TYPES}
+        getMarkerIcon={getMarkerIcon}
+      />
     ));
-  };
-
-  const GeodesicLine = ({ id, segments, start, end, distance }) => {
-    const mapInstance = useMap();
-
-    useEffect(() => {
-      const lines = segments.map((segment) => {
-        const line = L.polyline(segment, {
-          color: "black",
-          weight: 3,
-          opacity: 0.7,
-        }).addTo(mapInstance);
-
-        line.on("mouseover", (e) => {
-          const popup = L.popup()
-            .setLatLng(e.latlng)
-            .setContent(`Дистанция: ${distance.toFixed(2)} морских милей`)
-            .openOn(mapInstance);
-          line.on("mouseout", () => {
-            mapInstance.closePopup(popup);
-          });
-        });
-
-        line.on("click", (event) => {
-          handleLineClick(event, start, end);
-        });
-
-        return line;
-      });
-
-      return () => {
-        lines.forEach((line) => mapInstance.removeLayer(line));
-      };
-    }, [mapInstance, segments, distance]);
-
-    return null;
   };
 
   const handleDeletePoint = (id) => {
@@ -298,15 +307,33 @@ const SeaMap = () => {
     setShowIceLayer(!showIceLayer);
   };
 
-  const handleIcePolygon = (e) => {
-    setIcePolygon(e.target.getLatLngs()[0]);
+  const handleIcePolygonChange = (e, id) => {
+    const updatedPolygons = icePolygons.map((polygon) =>
+      polygon.id === id
+        ? { ...polygon, coordinates: e.target.getLatLngs()[0] }
+        : polygon
+    );
+    setIcePolygons(updatedPolygons);
+  };
+
+  const handlePassabilityChange = (id, newPassability) => {
+    const updatedPolygons = icePolygons.map((polygon) =>
+      polygon.id === id ? { ...polygon, passability: newPassability } : polygon
+    );
+    setIcePolygons(updatedPolygons);
   };
 
   const handleMapLoad = (mapInstance) => {
     setMap(mapInstance);
-    mapInstance.on("editable:vertex:dragend", handleIcePolygon);
-    mapInstance.on("editable:vertex:new", handleIcePolygon);
-    mapInstance.on("editable:vertex:deleted", handleIcePolygon);
+    mapInstance.on("editable:vertex:dragend", (e) =>
+      handleIcePolygonChange(e, e.layer._leaflet_id)
+    );
+    mapInstance.on("editable:vertex:new", (e) =>
+      handleIcePolygonChange(e, e.layer._leaflet_id)
+    );
+    mapInstance.on("editable:vertex:deleted", (e) =>
+      handleIcePolygonChange(e, e.layer._leaflet_id)
+    );
   };
 
   return (
@@ -335,14 +362,15 @@ const SeaMap = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-        {showIceLayer && (
-          <Polygon
-            positions={icePolygon}
-            color="blue"
-            fillOpacity={0.3}
-            editable={true}
-          />
-        )}
+        {showIceLayer &&
+          icePolygons.map((polygon) => (
+            <IcePolygon
+              key={polygon.id}
+              polygon={polygon}
+              handleIcePolygonChange={handleIcePolygonChange}
+              handlePassabilityChange={handlePassabilityChange}
+            />
+          ))}
         {renderMarkers(points)}
         {lines.map((line) => (
           <GeodesicLine
@@ -352,6 +380,7 @@ const SeaMap = () => {
             start={line.start}
             end={line.end}
             distance={line.distance}
+            handleLineClick={handleLineClick}
           />
         ))}
       </MapContainer>

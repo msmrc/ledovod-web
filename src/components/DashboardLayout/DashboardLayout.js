@@ -27,7 +27,7 @@ const DashboardLayout = () => {
                 <Link to="/dashboard/schedule">Расписание</Link>
               </li>
               <li className="menu-item">
-                <Link to="/dashboard/sea-map">Карта</Link>
+                <Link to="/dashboard/sea-map">Конфигуратор</Link>
               </li>
             </ul>
           </nav>
