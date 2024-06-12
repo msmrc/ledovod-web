@@ -10,6 +10,8 @@ import Ships from './pages/Ships/Ships';
 import Icebreakers from './pages/Icebreakers/Icebreakers';
 import './App.css';
 import CreateRequest from './pages/CreateRequest/CreateRequest';
+import CreateShip from './pages/CreateShip/CreateShip';
+import CreateIcebreaker from './pages/CreateIcebreaker/CreateIcebreaker';
 
 function App() {
   return (
@@ -22,7 +24,9 @@ function App() {
           <Route index path="requests" element={<Requests />} />
           <Route path="requests/create" element={<CreateRequest />} />
           <Route path="ships" element={<Ships />} />
+          <Route path="ships/create" element={<CreateShip />} />
           <Route path="icebreakers" element={<Icebreakers />} />
+          <Route path="icebreakers/create" element={<CreateIcebreaker />} />
           <Route path="schedule" element={<Schedule />} />
           <Route path="sea-map" element={<SeaMap />} />
         </Route>

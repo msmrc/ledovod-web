@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Table from '../../components/Table/Table';
 import PageHeader from '../../components/PageHeader/PageHeader';
+import { useNavigate } from 'react-router-dom';
 
 const Icebreakers = () => {
+  const navigate = useNavigate();
   const headers = [
     "Название судна",
     "Ледовый класс",
@@ -33,7 +35,7 @@ const Icebreakers = () => {
   ];
 
   const handleAddButtonClick = () => {
-    console.log("Add button clicked");
+    navigate('/dashboard/icebreakers/create');
   };
 
   return (

@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react";
 import PageHeaderWithBack from "../../components/PageHeaderWithBack/PageHeaderWithBack";
 import ActionFooter from "../../components/ActionFooter/ActionFooter";
 import { useNavigate } from "react-router-dom";
-import RequestCreateForm from "../../components/RequestCreateForm/RequestCreateForm";
+import IcebreakerCreateForm from "../../components/IcebreakerCreateForm/IcebreakerCreateForm";
 
-const CreateRequest = () => {
+const CreateIcebreaker = () => {
   const navigate = useNavigate();
   const formRef = useRef();
   
@@ -27,11 +27,11 @@ const CreateRequest = () => {
 
   return (
     <div>
-      <PageHeaderWithBack title="Новая заявка" onBackClick={handleBackClick} />
-      <RequestCreateForm ref={formRef} onSubmit={handleFormSubmit} />
+      <PageHeaderWithBack title="Новый ледокол" onBackClick={handleBackClick} />
+      <IcebreakerCreateForm ref={formRef} onSubmit={handleFormSubmit} />
       <ActionFooter onCreateClick={handleCreateClick} onCancelClick={handleCancelClick} />
     </div>
   );
 };
 
-export default CreateRequest;
+export default CreateIcebreaker;

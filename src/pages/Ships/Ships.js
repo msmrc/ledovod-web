@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import Table from '../../components/Table/Table';
+import { useNavigate } from 'react-router-dom';
 
 const Ships = () => {
+  const navigate = useNavigate();
   const headers = [
     "Название судна",
     "Ледовый класс",
@@ -33,7 +35,7 @@ const Ships = () => {
   ];
 
   const handleAddButtonClick = () => {
-    console.log("Add button clicked");
+    navigate('/dashboard/ships/create');
   };
 
   return (
