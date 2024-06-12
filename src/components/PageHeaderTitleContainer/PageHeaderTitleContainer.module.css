@@ -1,0 +1,12 @@
+.pageHeaderTitleContainer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .pageHeaderTitle {
+    font-size: 28px;
+    font-weight: 600;
+    color: #0b0a10;
+  }
+  

@@ -3,13 +3,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/MainLayout/MainLayout';
 import DashboardLayout from './components/DashboardLayout/DashboardLayout';
 import Home from './pages/Home/Home';
-import Dashboard from './pages/Dashboard';
-import Requests from './pages/Requests';
-import Ships from './pages/Ships';
-import Icebreakers from './pages/Icebreakers';
-import './App.css';
 import Schedule from './pages/Schedule/Schedule';
 import SeaMap from './pages/SeaMap/SeaMap';
+import Requests from './pages/Requests/Requests';
+import Ships from './pages/Ships/Ships';
+import Icebreakers from './pages/Icebreakers/Icebreakers';
+import './App.css';
+import CreateRequest from './pages/CreateRequest/CreateRequest';
 
 function App() {
   return (
@@ -19,8 +19,8 @@ function App() {
           <Route index element={<Home />} />
         </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="requests" element={<Requests />} />
+          <Route index path="requests" element={<Requests />} />
+          <Route path="requests/create" element={<CreateRequest />} />
           <Route path="ships" element={<Ships />} />
           <Route path="icebreakers" element={<Icebreakers />} />
           <Route path="schedule" element={<Schedule />} />

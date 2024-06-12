@@ -1,0 +1,10 @@
+.pageHeader {
+    width: 100%;
+    padding: 16px 0;
+    border-bottom: 1px solid #ebebeb;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 10;
+  }
+  

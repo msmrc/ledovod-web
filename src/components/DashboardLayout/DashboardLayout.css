@@ -1,23 +1,13 @@
 .dashboard-layout {
   display: flex;
   height: 100vh;
-  width: 100vw; /* Полная ширина экрана */
+  width: 100vw;
 }
 
 .dashboard-main-content {
-  flex: 1; /* Растягиваем основной контент */
+  flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-.admin-header {
-  height: 72px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 32px;
-  background-color: white;
-  border-bottom: 1px solid #e5e7eb;
 }
 
 .user-info {
@@ -28,7 +18,6 @@
 
 .dashboard-main {
   flex: 1;
-  overflow-y: auto; /* Прокрутка основного контента */
-  padding: 20px;
+  overflow-y: auto;
   box-sizing: border-box;
 }

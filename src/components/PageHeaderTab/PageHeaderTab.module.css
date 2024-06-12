@@ -1,0 +1,32 @@
+.pageHeaderTab {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  
+  .pageHeaderTab.active {
+    border-bottom: 2px solid #007bff;
+  }
+  
+  .pageHeaderTabText {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+  }
+  
+  .pageHeaderTabBadge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #e5e7eb;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 500;
+    color: #0b0a10;
+    margin-left: 8px;
+  }
+  
