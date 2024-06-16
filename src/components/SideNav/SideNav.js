@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styles from './SideNav.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactComponent as ChartPieIcon } from '../../data/icons/ChartPie.svg';
 import { ReactComponent as BoatIcon } from '../../data/icons/Boat.svg';
 import { ReactComponent as ClipboardTextIcon } from '../../data/icons/ClipboardText.svg';

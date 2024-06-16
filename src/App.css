@@ -7,3 +7,11 @@ body {
 .leaflet-bottom.leaflet-right {
   display: none;
 }
+
+.icon {
+  stroke: gray;
+}
+
+.icon.selected {
+  stroke: black;
+}

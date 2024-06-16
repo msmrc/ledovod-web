@@ -28,7 +28,7 @@ function App() {
           <Route path="icebreakers" element={<Icebreakers />} />
           <Route path="icebreakers/create" element={<CreateIcebreaker />} />
           <Route path="schedule" element={<Schedule />} />
-          <Route path="sea-map" element={<SeaMap />} />
+          <Route path="configuration" element={<SeaMap />} />
         </Route>
       </Routes>
     </Router>
