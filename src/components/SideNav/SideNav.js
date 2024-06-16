@@ -11,10 +11,10 @@ const SideNav = () => {
   const location = useLocation();
 
   const menuItems = [
+    { to: "/dashboard/schedule", icon: ClipboardTextIcon, label: "Расписание" },
     { to: "/dashboard/requests", icon: ChartPieIcon, label: "Заявки" },
     { to: "/dashboard/ships", icon: BoatIcon, label: "Корабли" },
     { to: "/dashboard/icebreakers", icon: FactoryIcon, label: "Ледоколы" },
-    { to: "/dashboard/schedule", icon: ClipboardTextIcon, label: "Расписание" },
     { to: "/dashboard/configuration", icon: MapPinIcon, label: "Конфигуратор" },
   ];
 

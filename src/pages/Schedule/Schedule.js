@@ -44,7 +44,7 @@ const Schedule = () => {
 
   const tabs = [
     { name: "Диаграмма", val: "diagram" },
-    { name: "Карта", val: "map" },
+    { name: "Карта *в разработке", val: "map" },
   ];
 
   const handleTabClick = (tab) => {

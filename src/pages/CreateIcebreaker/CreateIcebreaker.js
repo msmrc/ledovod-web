@@ -27,7 +27,7 @@ const CreateIcebreaker = () => {
 
   return (
     <div>
-      <PageHeaderWithBack title="Новый ледокол" onBackClick={handleBackClick} />
+      <PageHeaderWithBack title="Новый ледокол *в разработке" onBackClick={handleBackClick} />
       <IcebreakerCreateForm ref={formRef} onSubmit={handleFormSubmit} />
       <ActionFooter onCreateClick={handleCreateClick} onCancelClick={handleCancelClick} />
     </div>

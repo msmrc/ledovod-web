@@ -68,7 +68,7 @@ const Requests = () => {
   return (
     <div>
       <PageHeader
-        title="Заявки"
+        title="Заявки *в разработке"
         tabs={tabs}
         activeTab={activeTab}
         onTabClick={handleTabClick}

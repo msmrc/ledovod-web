@@ -41,7 +41,7 @@ const Ships = () => {
   return (
     <div>
       <PageHeader
-        title="Корабли"
+        title="Корабли *в разработке"
         onAddButtonClick={handleAddButtonClick}
       />
       <div>

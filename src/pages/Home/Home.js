@@ -11,7 +11,7 @@ const Home = () => {
             Ледовод — инновационный сервис для планирования и заказа проведения
             кораблей через северный морской путь
           </div>
-          <Link to="/dashboard/requests" className={styles.buttonContainer}>
+          <Link to="/dashboard/schedule" className={styles.buttonContainer}>
             <div className={styles.buttonText}>Войти в аккаунт</div>
           </Link>
         </div>

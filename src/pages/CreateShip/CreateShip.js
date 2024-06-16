@@ -27,7 +27,7 @@ const CreateShip = () => {
 
   return (
     <div>
-      <PageHeaderWithBack title="Новый корабль" onBackClick={handleBackClick} />
+      <PageHeaderWithBack title="Новый корабль *в разработке" onBackClick={handleBackClick} />
       <ShipCreateForm ref={formRef} onSubmit={handleFormSubmit} />
       <ActionFooter onCreateClick={handleCreateClick} onCancelClick={handleCancelClick} />
     </div>

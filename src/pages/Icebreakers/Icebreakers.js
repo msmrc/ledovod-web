@@ -41,7 +41,7 @@ const Icebreakers = () => {
   return (
     <div>
       <PageHeader
-        title="Ледоколы"
+        title="Ледоколы *в разработке"
         onAddButtonClick={handleAddButtonClick}
       />
       <div>
