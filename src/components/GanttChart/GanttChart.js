@@ -3,6 +3,7 @@ import Header from "./Header";
 import Row from "./Row";
 import styles from "./GanttChart.module.css";
 import { getDatesArray, calculatePosition } from "./utils";
+import Popup from "./Popup";
 
 const GanttChart = ({ data, startDate, endDate }) => {
   const containerRef = useRef(null);
@@ -13,6 +14,7 @@ const GanttChart = ({ data, startDate, endDate }) => {
   const datesArray = getDatesArray(new Date(startDate), new Date(endDate));
 
   const handleMouseDown = (e) => {
+    e.stopPropagation();
     setIsDragging(true);
     setStartX(e.pageX - containerRef.current.offsetLeft);
     setScrollLeft(containerRef.current.scrollLeft);
