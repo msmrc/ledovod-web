@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styles from './SideNav.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInbox, faShip, faIceCream, faCalendarAlt, faMap } from '@fortawesome/free-solid-svg-icons';
+import { ReactComponent as ChartPieIcon } from '../../data/icons/ChartPie.svg';
+import { ReactComponent as BoatIcon } from '../../data/icons/Boat.svg';
+import { ReactComponent as ClipboardTextIcon } from '../../data/icons/ClipboardText.svg';
+import { ReactComponent as FactoryIcon } from '../../data/icons/Factory.svg';
+import { ReactComponent as MapPinIcon } from '../../data/icons/MapPin.svg';
 
 const SideNav = () => {
+  const [selected, setSelected] = useState(null);
   const location = useLocation();
+  const handleItemClick = (index) => {
+    setSelected(index);
+  };
 
   const menuItems = [
-    { to: '/dashboard/requests', icon: faInbox, label: 'Заявки' },
-    { to: '/dashboard/ships', icon: faShip, label: 'Корабли' },
-    { to: '/dashboard/icebreakers', icon: faIceCream, label: 'Ледоколы' },
-    { to: '/dashboard/schedule', icon: faCalendarAlt, label: 'Расписание' },
-    { to: '/dashboard/sea-map', icon: faMap, label: 'Карта' },
+    { to: '/dashboard/requests', icon: ChartPieIcon, label: 'Заявки' },
+    { to: '/dashboard/ships', icon: BoatIcon, label: 'Корабли' },
+    { to: '/dashboard/icebreakers', icon: FactoryIcon, label: 'Ледоколы' },
+    { to: '/dashboard/schedule', icon: ClipboardTextIcon, label: 'Расписание' },
+    { to: '/dashboard/configuration', icon: MapPinIcon, label: 'Конфигуратор' },
   ];
 
   return (
@@ -22,18 +30,21 @@ const SideNav = () => {
           <img className={styles.logo} src="/images/logo_horizontal.svg" alt="Logo" />
         </div>
         <div className={styles.menu}>
-          {menuItems.map((item) => (
+          {menuItems.map((item, index) => {
+            const Icon = item.icon;
+            return (
             <Link
               key={item.to}
               to={item.to}
+              onClick={() => handleItemClick(index)}
               className={`${styles.menuItem} ${location.pathname === item.to ? styles.active : ''}`}
             >
               <div className={styles.iconWrapper}>
-                <FontAwesomeIcon icon={item.icon} className={styles.icon} />
+                <Icon className={`icon ${selected === index ? 'selected' : ''}`} />
               </div>
               <div className={styles.menuText}>{item.label}</div>
             </Link>
-          ))}
+          )})}
         </div>
       </div>
       <div className={styles.bottomSection}>
