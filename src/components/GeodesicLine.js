@@ -8,9 +8,9 @@ const GeodesicLine = ({ id, segments, start, end, distance, handleLineClick }) =
   useEffect(() => {
     const lines = segments.map((segment) => {
       const line = L.polyline(segment, {
-        color: "black",
-        weight: 3,
-        opacity: 0.7,
+        color: "#56B9F2",
+        weight: 1,
+        opacity: 1,
       }).addTo(mapInstance);
 
       line.on("mouseover", (e) => {

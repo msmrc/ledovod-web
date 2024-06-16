@@ -19,22 +19,21 @@ const POINT_TYPES = ["Порт", "Контрольная точка"];
 
 // Создание кастомной иконки для маркера
 const customMarkerIcon = new L.Icon({
-  iconUrl:
-    "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE1IDBDMjMuMjgzIDAgMzAgNi43MTcgMzAgMTVDMzAgMjMuMjgzIDIzLjI4MyAzMCAxNSAzMFMwIDIzLjI4MyAwIDE1QzAgNi43MTcgNi43MTcgMCAxNSAwWiIgZmlsbD0iIzAwRkZGRiIvPgo8L3N2Zz4K",
+  iconUrl: require("../../data/images/Ellipse.png"),
   iconSize: [20, 20],
   iconAnchor: [10, 10],
 });
 
 const portIcon = new L.Icon({
-  iconUrl: require("../../data/images/port.png"),
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+  iconUrl: require("../../data/images/Anchor.png"),
+  iconSize: [24, 24],
+  iconAnchor: [10, 30],
 });
 
 const checkpointIcon = new L.Icon({
-  iconUrl: require("../../data/images/checkpoint.png"),
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+  iconUrl: require("../../data/images/Pin.png"),
+  iconSize: [20, 30],
+  iconAnchor: [10, 35],
 });
 
 const initialIcePolygons = [

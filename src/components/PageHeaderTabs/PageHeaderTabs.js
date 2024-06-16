@@ -10,8 +10,8 @@ const PageHeaderTabs = ({ tabs, activeTab, onTabClick }) => {
           key={index}
           name={tab.name}
           count={tab.count}
-          active={activeTab === tab.name}
-          onClick={() => onTabClick(tab.name)}
+          active={activeTab === tab.val}
+          onClick={() => onTabClick(tab)}
         />
       ))}
     </div>

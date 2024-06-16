@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Requests = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Активные");
+  const [activeTab, setActiveTab] = useState("active");
 
   const headers = [
     "Название судна",
@@ -53,12 +53,12 @@ const Requests = () => {
   ];
 
   const tabs = [
-    { name: "Активные", count: 12 },
-    { name: "Прошедшие", count: 12 },
+    { name: "Активные", val: 'active', count: 12 },
+    { name: "Прошедшие", val: 'last', count: 12 },
   ];
 
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
+  const handleTabClick = (tab) => {
+    setActiveTab(tab.val);
   };
 
   const handleAddButtonClick = () => {
