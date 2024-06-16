@@ -7,7 +7,8 @@ const PageHeaderContent = ({ title, tabs, activeTab, onTabClick, onAddButtonClic
   return (
     <div className={styles.pageHeaderContent}>
       <PageHeaderTitleContainer title={title} tabs={tabs} activeTab={activeTab} onTabClick={onTabClick} />
-      <PageHeaderAddButton onClick={onAddButtonClick}>Добавить</PageHeaderAddButton>
+      {onAddButtonClick && (
+      <PageHeaderAddButton onClick={onAddButtonClick}>Добавить</PageHeaderAddButton>)}
     </div>
   );
 };

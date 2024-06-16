@@ -19,3 +19,11 @@ label {
 select {
   padding: 5px;
 }
+
+.tableContainer {
+  max-width: 1200px;
+  padding-top: 16px;
+  margin: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+}

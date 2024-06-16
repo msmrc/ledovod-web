@@ -1,125 +1,138 @@
-import React, { useState } from "react";
-import { Gantt, Task, EventOption } from "gantt-task-react";
+import React, { useEffect, useState } from "react";
 import "gantt-task-react/dist/index.css";
 import styles from "./Schedule.module.css";
+import PageHeader from "../../components/PageHeader/PageHeader";
+import axios from "axios";
+import { API_URL } from "../../api/config";
+import GanttChart from "../../components/GanttChart/GanttChart";
 
 export function initTasks() {
-    const data = [
-      {
-        id: '1',
-        name: 'Ледокол 1',
-        start: new Date('2024-06-01'),
-        end: new Date('2024-06-30'),
-        type: 'project',
-        hideChildren: false,
-        progress: 100,
-        displayOrder: 1,
-        tasks: [
-          {
-            id: '1-1-1',
-            name: 'Корабль 1',
-            start: new Date('2024-06-01'),
-            end: new Date('2024-06-10'),
-            type: 'task',
+  const data = [
+    {
+      id: "1",
+      name: "Ледокол 1",
+      start: new Date("2024-06-01"),
+      end: new Date("2024-06-30"),
+      type: "project",
+      hideChildren: false,
+      progress: 100,
+      displayOrder: 1,
+      tasks: [
+        {
+          id: "1-1-1",
+          name: "Корабль 1",
+          start: new Date("2024-06-01"),
+          end: new Date("2024-06-10"),
+          type: "task",
+          progress: 100,
+          displayOrder: 2,
+        },
+        {
+          id: "1-1-2",
+          name: "Корабль 2",
+          start: new Date("2024-06-05"),
+          end: new Date("2024-06-15"),
+          type: "task",
+          progress: 100,
+          displayOrder: 3,
+        },
+        {
+          id: "1-1-3",
+          name: "Корабль 2",
+          start: new Date("2024-06-05"),
+          end: new Date("2024-06-15"),
+          type: "task",
+          progress: 100,
+          displayOrder: 4,
+        },
+      ],
+    },
+  ];
+  return data;
+}
+
+const Schedule = () => {
+  const [activeTab, setActiveTab] = useState("Диаграмма");
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get(`${API_URL}/generate_default_schedule`)
+      .then(response => {
+        const scheduleData = response.data.icebreaker_schedule.map((item, index) => ({
+          id: `icebreaker-${item.icebreaker_id}`,
+          name: `${item.icebreaker_name} - ${item.ship_name}`,
+          start: new Date(item.start_time),
+          end: new Date(item.end_time),
+          progress: 100,
+          hideChildren: true,
+          tasks: item.path.map((pathItem, pathIndex) => ({
+            id: `path-${index}-${pathIndex}`,
+            name: `Path from ${pathItem.from} to ${pathItem.to}`,
+            start: new Date(item.start_time), 
+            end: new Date(item.end_time),
             progress: 100,
-            displayOrder: 2,
-          },
-          {
-            id: '1-1-2',
-            name: 'Корабль 2',
-            start: new Date('2024-06-05'),
-            end: new Date('2024-06-15'),
-            type: 'task',
-            progress: 100,
-            displayOrder: 3,
-          },
-          {
-            id: '1-1-3',
-            name: 'Корабль 2',
-            start: new Date('2024-06-05'),
-            end: new Date('2024-06-15'),
-            type: 'task',
-            progress: 100,
-            displayOrder: 4,
-          },
-        ],
-      },
-    ];
-    return data;
-  }
-  
-  const Schedule = () => {
-    const [timeFrame, setTimeFrame] = useState('1 month');
-    const [tasks, setTasks] = useState(initTasks());
-  
-    const toggleTaskExpansion = (task) => {
-      task.hideChildren = !task.hideChildren;
-      if (task.tasks) {
-        task.tasks.forEach(toggleTaskExpansion);
-      }
-    };
-  
-    const handleExpanderClick = (task) => {
-      const newTasks = tasks.map(t => {
-        if (t.id === task.id) {
-          const updatedTask = { ...t };
-          toggleTaskExpansion(updatedTask);
-          return updatedTask;
-        }
-        return t;
+          }))
+        }));
+        setTasks(scheduleData);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке данных:', error);
+        setLoading(false);
       });
-      setTasks([...newTasks]);
-    };
-  
-    const handleTimeFrameChange = (e) => {
-      setTimeFrame(e.target.value);
-    };
-  
-    // Flatten the tasks structure for the Gantt component
-    const flattenTasks = (tasks) => {
-      const result = [];
-      const flatten = (task) => {
-        result.push(task);
-        if (task.tasks && !task.hideChildren) {
-          task.tasks.forEach(flatten);
-        }
-      };
-      tasks.forEach(flatten);
-      return result;
-    };
+  }, []);
 
-    const columns = [
-        { name: "name", label: "Название", width: 150 },
-        { name: "start", label: "Начало", width: 100 },
-        { name: "end", label: "Конец", width: 100 },
-        { name: "progress", label: "Прогресс", width: 100 }
-      ];
+  const tabs = [
+    { name: "Диаграмма" },
+    { name: "Карта" },
+  ];
 
-    return (
-      <div className={styles.scheduleContainer}>
-        <div className={styles.controls}>
-          <label htmlFor="timeFrame">Временной промежуток: </label>
-          <select id="timeFrame" value={timeFrame} onChange={handleTimeFrameChange}>
-            <option value="1 month">1 месяц</option>
-            <option value="3 months">3 месяца</option>
-            {/* <option value="6 months">6 месяцев</option> */}
-          </select>
-        </div>
-        <Gantt
-          tasks={flattenTasks(tasks)}
-          onExpanderClick={handleExpanderClick}
-          viewMode={
-            timeFrame === '1 month'
-              ? 'Day'
-              : timeFrame === '3 months'
-                ? 'Month'
-                : 'Quarter'
-          }
-          locale="ru"
-          barFill={100}
-        />
-      </div>
-    );
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
   };
-  
-  export default Schedule;
+
+  const data = [
+    { ship: 'Ship A', type: 'Icebreaker', startDate: '2024-06-01', endDate: '2024-06-10' },
+    { ship: 'Ship B', type: 'Cargo', startDate: '2024-06-05', endDate: '2024-06-15' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-02-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-02-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-02-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+    { ship: 'Ship C', type: 'Tanker', startDate: '2024-06-07', endDate: '2024-06-12' },
+  ];
+  return (
+    <div>
+      <PageHeader
+        title="Расписание"
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabClick={handleTabClick}
+      />
+      <div className={styles.tableContainer}>
+        {loading ? (
+          <div className={styles.loader}>Загрузка...</div>
+        ) : (
+          <GanttChart data={data} startDate="2024-06-01" endDate="2024-08-20" />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Schedule;
