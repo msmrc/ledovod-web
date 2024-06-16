@@ -14,63 +14,33 @@ const Schedule = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const shipsData = [
-    {
-        name: "Вайгач",
-        id: 4,
-        ship_type: "icebreaker",
-        travel_type: "self",
-        initial_position: 6,
-        final_position: 6,
-        departure_time: "01-03-22 00:00",
-        arrival_time: "28-02-22 14:00"
-    },
-    {
-        name: "Вайгач",
-        id: 4,
-        ship_type: "icebreaker",
-        travel_type: "with ship",
-        initial_position: 11,
-        final_position: 41,
-        departure_time: "01-03-22 00:00",
-        arrival_time: "05-03-22 15:00"
-    },
-    {
-        name: "Ямал",
-        id: 2,
-        ship_type: "icebreaker",
-        travel_type: "self",
-        initial_position: 41,
-        final_position: 41,
-        departure_time: "02-03-22 00:00",
-        arrival_time: "28-02-22 20:00"
-    }
-  ]
-
   const mapShipPositions = (shipsData, points) => {
-    return shipsData.map(ship => {
-      const initialPositionName = points.find(point => point.id === ship.initial_position)?.name || '';
-      const finalPositionName = points.find(point => point.id === ship.final_position)?.name || '';
-  
+    return shipsData.map((ship) => {
+      const initialPositionName =
+        points.find((point) => point.id === ship.initial_position)?.name || "";
+      const finalPositionName =
+        points.find((point) => point.id === ship.final_position)?.name || "";
+
       return {
         ...ship,
         initialPositionName,
-        finalPositionName
+        finalPositionName,
       };
     });
   };
-  
+
   useEffect(() => {
-    // const updatedShipsData = mapShipPositions(shipsData, points);
-    // console.log(updatedShipsData)
-    // setTasks(updatedShipsData);
-    // setLoading(false);
     axios
       .get(`${API_URL}/get_easy_ghantt`)
       .then((response) => {
-        const scheduleData = response.data;
-        const updatedShipsData = mapShipPositions(scheduleData, points);
-        console.log(updatedShipsData)
+        const scheduleData = response.data; 
+        const sortedData = scheduleData.sort((a, b) => {
+          const dateA = new Date(a.departure_time);
+          const dateB = new Date(b.departure_time);
+          return dateA - dateB;
+        });
+        const updatedShipsData = mapShipPositions(sortedData, points);
+        console.log(updatedShipsData);
         setTasks(updatedShipsData);
         setLoading(false);
       })
@@ -89,7 +59,6 @@ const Schedule = () => {
     setActiveTab(tab.val);
   };
 
-
   return (
     <div>
       <PageHeader
@@ -107,7 +76,7 @@ const Schedule = () => {
             {activeTab === "diagram" ? (
               <GanttChart
                 data={tasks}
-                startDate="2022-01-01"
+                startDate="2022-02-01"
                 endDate="2022-09-01"
               />
             ) : (

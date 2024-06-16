@@ -39,15 +39,12 @@
 .bar {
   background-color: #337AFF;
   height: 20px;
-  width: calc(100% * var(--duration));
   position: absolute;
   top: 50%;
-  left: 0;
   transform: translateY(-50%);
   z-index: 2;
   border-radius: 4px;
 }
-
 
 .stickyColumn {
   position: sticky;

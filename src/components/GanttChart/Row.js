@@ -24,16 +24,17 @@ const Row = ({ item, datesArray, startPos, duration }) => {
         {new Date(item.arrival_time).toLocaleDateString("ru-RU")}
       </div>
       {datesArray.map((_, idx) => (
-        <div key={idx} className={styles.dateCell}>
-          {idx === startPos ? (
-            <div
-              onClick={onClick}
-              className={styles.bar}
-              style={{ "--duration": duration }}
-              data-item-id={item.id}
-            ></div>
-          ) : null}
-        </div>
+       <div key={idx} className={styles.dateCell}>
+       {idx >= startPos && idx < startPos + duration ? (
+         <div
+         onClick={onClick}
+           className={styles.bar}
+           style={{ left: `${startPos * 100}%`, width: `${duration * 100}%` }}
+           data-item-id={item.ship_id}
+         ></div>
+       ) : null}
+     </div>
+      
       ))}
       {showPopup && <Popup info={item} onClose={handleClosePopup} />}
     </div>
