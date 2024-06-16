@@ -12,18 +12,18 @@ const Popup = ({ info, onClose }) => {
         </div>
         <div className={styles.popupContent}>
           <p>
-            <strong>Корабль:</strong> {info.ship}
+            <strong>Корабль:</strong> {info.name}
           </p>
           <p>
-            <strong>Тип:</strong> {info.type}
+            <strong>Тип:</strong> {info.ship_type}
           </p>
           <p>
             <strong>Дата начала:</strong>{" "}
-            {new Date(info.startDate).toLocaleDateString("ru-RU")}
+            {new Date(info.departure_time).toLocaleDateString("ru-RU")}
           </p>
           <p>
             <strong>Дата окончания:</strong>{" "}
-            {new Date(info.endDate).toLocaleDateString("ru-RU")}
+            {new Date(info.arrival_time).toLocaleDateString("ru-RU")}
           </p>
         </div>
       </div>

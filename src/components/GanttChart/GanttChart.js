@@ -3,7 +3,6 @@ import Header from "./Header";
 import Row from "./Row";
 import styles from "./GanttChart.module.css";
 import { getDatesArray, calculatePosition } from "./utils";
-import Popup from "./Popup";
 
 const GanttChart = ({ data, startDate, endDate }) => {
   const containerRef = useRef(null);
@@ -60,8 +59,8 @@ const GanttChart = ({ data, startDate, endDate }) => {
         <Header datesArray={datesArray} />
         {data.map((item, index) => {
           const { startPos, endPos, duration } = calculatePosition(
-            item.startDate,
-            item.endDate,
+            item.departure_time,
+            item.arrival_time,
             datesArray
           );
           return (

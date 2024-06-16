@@ -5,42 +5,80 @@ import PageHeader from "../../components/PageHeader/PageHeader";
 import axios from "axios";
 import { API_URL } from "../../api/config";
 import GanttChart from "../../components/GanttChart/GanttChart";
+import data from "../../data/data_with_types.json";
 import SeaMap from "../SeaMap/SeaMap";
 
 const Schedule = () => {
+  const [points, setPoints] = useState(data);
   const [activeTab, setActiveTab] = useState("diagram");
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const shipsData = [
+    {
+        name: "Вайгач",
+        id: 4,
+        ship_type: "icebreaker",
+        travel_type: "self",
+        initial_position: 6,
+        final_position: 6,
+        departure_time: "01-03-22 00:00",
+        arrival_time: "28-02-22 14:00"
+    },
+    {
+        name: "Вайгач",
+        id: 4,
+        ship_type: "icebreaker",
+        travel_type: "with ship",
+        initial_position: 11,
+        final_position: 41,
+        departure_time: "01-03-22 00:00",
+        arrival_time: "05-03-22 15:00"
+    },
+    {
+        name: "Ямал",
+        id: 2,
+        ship_type: "icebreaker",
+        travel_type: "self",
+        initial_position: 41,
+        final_position: 41,
+        departure_time: "02-03-22 00:00",
+        arrival_time: "28-02-22 20:00"
+    }
+  ]
+
+  const mapShipPositions = (shipsData, points) => {
+    return shipsData.map(ship => {
+      const initialPositionName = points.find(point => point.id === ship.initial_position)?.name || '';
+      const finalPositionName = points.find(point => point.id === ship.final_position)?.name || '';
+  
+      return {
+        ...ship,
+        initialPositionName,
+        finalPositionName
+      };
+    });
+  };
+  
   useEffect(() => {
+    // const updatedShipsData = mapShipPositions(shipsData, points);
+    // console.log(updatedShipsData)
+    // setTasks(updatedShipsData);
+    // setLoading(false);
     axios
-      .get(`${API_URL}/generate_default_schedule`)
+      .get(`${API_URL}/get_easy_ghantt`)
       .then((response) => {
-        const scheduleData = response.data.icebreaker_schedule.map(
-          (item, index) => ({
-            id: `icebreaker-${item.icebreaker_id}`,
-            name: `${item.icebreaker_name} - ${item.ship_name}`,
-            start: new Date(item.start_time),
-            end: new Date(item.end_time),
-            progress: 100,
-            hideChildren: true,
-            tasks: item.path.map((pathItem, pathIndex) => ({
-              id: `path-${index}-${pathIndex}`,
-              name: `Path from ${pathItem.from} to ${pathItem.to}`,
-              start: new Date(item.start_time),
-              end: new Date(item.end_time),
-              progress: 100,
-            })),
-          })
-        );
-        setTasks(scheduleData);
+        const scheduleData = response.data;
+        const updatedShipsData = mapShipPositions(scheduleData, points);
+        console.log(updatedShipsData)
+        setTasks(updatedShipsData);
         setLoading(false);
       })
       .catch((error) => {
         console.error("Ошибка при загрузке данных:", error);
         setLoading(false);
       });
-  }, []);
+  }, [points]);
 
   const tabs = [
     { name: "Диаграмма", val: "diagram" },
@@ -51,32 +89,7 @@ const Schedule = () => {
     setActiveTab(tab.val);
   };
 
-  const data = [
-    {
-      ship: "Ship A",
-      type: "Icebreaker",
-      startDate: "2024-06-01",
-      endDate: "2024-06-10",
-    },
-    {
-      ship: "Ship B",
-      type: "Cargo",
-      startDate: "2024-06-05",
-      endDate: "2024-06-15",
-    },
-    {
-      ship: "Ship C",
-      type: "Tanker",
-      startDate: "2024-06-07",
-      endDate: "2024-06-12",
-    },
-    {
-      ship: "Ship C",
-      type: "Tanker",
-      startDate: "2024-06-07",
-      endDate: "2024-06-12",
-    },
-  ];
+
   return (
     <div>
       <PageHeader
@@ -93,9 +106,9 @@ const Schedule = () => {
           <div>
             {activeTab === "diagram" ? (
               <GanttChart
-                data={data}
-                startDate="2024-06-01"
-                endDate="2024-08-20"
+                data={tasks}
+                startDate="2022-01-01"
+                endDate="2022-09-01"
               />
             ) : (
               <SeaMap />
